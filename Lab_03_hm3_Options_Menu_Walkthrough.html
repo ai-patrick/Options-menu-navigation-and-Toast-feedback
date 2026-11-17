@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Options Menu Demo — Lab 3 Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f8f7;--card:#fff;--ink:#1c2b29;--mute:#586967;--line:#cddad8;--acc:#0f766e;--accbg:#e3f2ef;--warn:#fff4dc;--warnl:#e0b252;--tip:#e8f1fb;--tipl:#7aa7d9;--code:#142120}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:40px 20px 80px}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0 .1em}
+h2{font-size:1.5rem;margin:2.4em 0 .6em;padding-bottom:.35em;border-bottom:2px solid var(--line)}
+h3{font-size:1.1rem;margin:1.8em 0 .4em}
+p{margin:.6em 0;max-width:72ch}
+.kicker{color:var(--acc);font-weight:600;font-size:.9rem}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin:16px 0 0;color:var(--mute);font-size:.92rem}
+.meta b{color:var(--ink);font-weight:600}
+.fill{border-bottom:1.5px dashed var(--acc);padding:0 4px;min-width:5em;display:inline-block;color:var(--acc)}
+.fill:focus{outline:2px solid var(--acc);outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:16px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card b{display:block;margin-bottom:2px}.card span{color:var(--mute);font-size:.92rem}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.92rem;margin:14px 0}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accbg);font-weight:600}tr:last-child td{border-bottom:0}
+td code,p code,li code{background:var(--accbg);padding:1px 5px;border-radius:5px;font-size:.88em}
+.res{cursor:pointer;text-align:center;width:64px;font-size:1.1rem;user-select:none}
+.ed{min-width:9em;color:var(--acc)}
+.note{border-left:4px solid;border-radius:8px;padding:10px 14px;margin:16px 0}
+.note.warn{background:var(--warn);border-color:var(--warnl)}.note.tip{background:var(--tip);border-color:var(--tipl)}
+.note.draft{background:var(--card);border:1px dashed var(--warnl);border-left:4px solid var(--warnl)}
+.note p{margin:.3em 0}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.9rem}
+.chip.ok{background:var(--accbg);border-color:var(--acc)}.chip.bad{background:var(--warn);border-color:var(--warnl)}
+.arr{color:var(--mute)}
+.code{margin:14px 0;border-radius:12px;overflow:hidden;background:var(--code);color:#dbe8e6}
+.code figcaption{padding:8px 14px;font:500 .8rem ui-monospace,Menlo,Consolas,monospace;background:#0b1514;color:#9fb8b4}
+.code figcaption b{color:#6fd3c4;font-weight:500}
+.code pre{margin:0;padding:12px 0;overflow-x:auto;font:400 .82rem/1.55 ui-monospace,Menlo,Consolas,monospace;counter-reset:n}
+.l::before{counter-increment:n;content:counter(n);display:inline-block;width:2.4em;margin-right:1.1em;text-align:right;color:#5f7a77;user-select:none}
+.code i{font-style:normal}.c{color:#7f9a97;font-style:italic!important}.s{color:#e6c07b}.k{color:#7fd1c3}.a{color:#e5a3c5}.t{color:#8ab4f8}.n{color:#f0a77a}
+details{margin:14px 0;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--acc)}details .code{margin:0;border-radius:0 0 12px 12px}
+.tree{font:.85rem/1.6 ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;white-space:pre;overflow-x:auto}
+.step{display:grid;grid-template-columns:44px 1fr;gap:4px 14px;margin:26px 0}
+.step .no{width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font-weight:700;color:var(--mute)}
+.step h3{margin:6px 0 0}.step p,.step .phone{grid-column:2}
+.phone{display:grid;place-items:center;width:210px;height:420px;border:8px solid #2a2f33;border-radius:28px;background:var(--card);color:var(--mute);font-size:.85rem;text-align:center;padding:12px;cursor:pointer;overflow:hidden}
+.phone.over{outline:3px dashed var(--acc)}.phone input{display:none}.phone img{width:100%;height:100%;object-fit:contain}
+ul,ol{max-width:72ch}li{margin:.25em 0}
+@media print{@page{size:A4;margin:14mm}body{background:#fff;color:#000;font-size:11pt}main{padding:0;max-width:none}
+.hint{display:none}.code pre{white-space:pre-wrap;overflow:visible}.code,.card,.note,table,.step{break-inside:avoid}h2{break-after:avoid}}
+.phone{width:254px;height:466px;border:2px solid var(--line);border-radius:28px;padding:0;background:#161216}
+.phone img{object-fit:cover}.card .ic{font-size:1.4rem;display:block}
+.who{display:flex;flex-wrap:wrap;gap:8px 20px;color:var(--mute);margin:14px 0 0;font-size:.95rem}
+.sub{color:var(--mute);margin:.2em 0 0}
+@media print{.step{break-inside:avoid}.phone{border-color:#999}}
+</style></head><body><main>
+<p class="kicker">MOBILE APPLICATION DEVELOPMENT &bull; LAB WORK</p>
+<h1>Options Menu Demo — Navigation & Toast Feedback</h1>
+<p class="sub">An Android (Java) walkthrough: implementing an options menu with three actions, handling selections with Toast feedback, navigating between activities, and diagnosing a deliberate fault.</p>
+<div class="who"><span>&#128100; <b>Patrick Kilonzo Mbithi</b></span><span>&#127380; SCT211-0036/2025</span><span>&#127891; BSc Computer Science</span><span>&#128104;&#8205;&#127979; Dr. Lawrence Nderu</span></div>
+
+<h2>1 &middot; Lab Objective</h2>
+<p>The goal of this lab is to build an interactive Android application that demonstrates the complete lifecycle of an Options Menu: declaring the menu in XML, attaching it to the Activity via <code>onCreateOptionsMenu()</code>, handling user selections in <code>onOptionsItemSelected()</code>, providing appropriate user feedback via Toast and AlertDialog, and navigating to a second screen (Activity) with correct Back button behavior.</p>
+<p>By the end of this lab the app can:</p>
+<div class="grid">
+<div class="card"><span class="ic">&#9166;&#65039;</span><b>Options Menu</b><span>Three meaningful actions: Add Record, View Records, About</span></div>
+<div class="card"><span class="ic">&#9728;</span><b>Toast Feedback</b><span>Brief non-critical messages for each menu action</span></div>
+<div class="card"><span class="ic">&#128251;</span><b>Screen Navigation</b><span>View Records launches RecordsActivity; Back returns cleanly</span></div>
+<div class="card"><span class="ic">&#128221;</span><b>About Dialog</b><span>AlertDialog with app information (multi-line, persistent)</span></div>
+<div class="card"><span class="ic">&#128187;</span><b>Fault Demo</b><span>Deliberate incorrect item ID with symptom, cause, fix, retest</span></div>
+<div class="card"><span class="ic">&#128247;</span><b>State Preservation</b><span>onSaveInstanceState preserves fault flag across rotation</span></div>
+</div>
+<table><tr><th>Component</th><th>Purpose in this app</th></tr>
+<tr><td><code>res/menu/options_menu.xml</code></td><td>Declares 4 items with stable IDs, titles, icons, showAsAction</td></tr>
+<tr><td><code>onCreateOptionsMenu()</code></td><td>Inflates the menu resource and attaches it to the action bar</td></tr>
+<tr><td><code>onOptionsItemSelected()</code></td><td>Routes each item ID to its handler; demonstrates deliberate fault</td></tr>
+<tr><td><code>Toast</code></td><td>Brief non-critical feedback (Add Record, View Records, About)</td></tr>
+<tr><td><code>AlertDialog.Builder</code></td><td>Modal for About; fault explanation dialog</td></tr>
+<tr><td><code>Intent + startActivity()</code></td><td>Launches RecordsActivity for "View Records"</td></tr>
+<tr><td><code>RecordManager (singleton)</code></td><td>In-memory storage for records shared between activities</td></tr>
+<tr><td><code>onSaveInstanceState()</code></td><td>Preserves fault-demo flag across rotation/recreation</td></tr></table>
+
+<h2>2 &middot; How the App Works</h2>
+<p>Before writing code, it helps to see the user journey. The app has a main screen with an action bar menu, and a second screen for viewing records. The decision points are: which menu item was selected, and whether the fault demo is active.</p>
+<div class="flow"><span class="chip">Launch App</span><span class="arr">&rarr;</span><span class="chip">Open Menu (&hellip;)</span><span class="arr">&rarr;</span><span class="chip">Select "Add Record"</span><span class="arr">&rarr;</span><span class="chip">Toast + record added</span></div>
+<div class="flow"><span class="chip">Open Menu (&hellip;)</span><span class="arr">&rarr;</span><span class="chip">Select "View Records"</span><span class="arr">&rarr;</span><span class="chip">Toast + RecordsActivity</span><span class="arr">&rarr;</span><span class="chip">Press Back</span><span class="arr">&rarr;</span><span class="chip">Returns, no dup action</span></div>
+<div class="flow"><span class="chip">Open Menu (&hellip;)</span><span class="arr">&rarr;</span><span class="chip">Select "About"</span><span class="arr">&rarr;</span><span class="chip">Toast + AlertDialog</span></div>
+<div class="flow"><span class="chip">Toggle Fault ON</span><span class="arr">&rarr;</span><span class="chip bad">"Add Record" shows wrong toast</span><span class="arr">&rarr;</span><span class="chip">Toggle Fault OFF</span><span class="arr">&rarr;</span><span class="chip ok">Normal operation restored</span></div>
+
+<h3>Event Flow for "View Records" (Screen Change)</h3>
+<p>When the user selects <b>View Records</b> from the options menu:</p>
+<ol>
+<li><code>onOptionsItemSelected(MenuItem)</code> receives the click event</li>
+<li>Switch/if-chain matches <code>R.id.menu_view_records</code></li>
+<li><code>handleViewRecords()</code> is called</li>
+<li>Toast feedback shown: "Opening records list&hellip;"</li>
+<li>Intent created: <code>new Intent(this, RecordsActivity.class)</code></li>
+<li><code>startActivity(intent)</code> launches the new Activity</li>
+<li><code>RecordsActivity.onCreate()</code> inflates layout, loads records from <code>RecordManager</code></li>
+<li>User views list; pressing <b>BACK</b> calls <code>finish()</code> on RecordsActivity</li>
+<li><code>MainActivity.onResume()</code> fires — but <b>NO duplicate action</b> occurs because:
+<ul>
+<li>MainActivity was not destroyed (only paused)</li>
+<li><code>onCreate()</code> is NOT called again</li>
+<li>No <code>onNewIntent()</code> override exists to re-trigger the action</li>
+</ul>
+</li>
+<li>Fault-demo flag is preserved via <code>onSaveInstanceState()</code>/restore</li>
+</ol>
+
+<h3>Project Structure</h3>
+<div class="tree">Options_menu/
+  app/
+    src/main/
+      java/com/example/options_menu/
+        MainActivity.java        &larr; Logic: menu, toasts, navigation, fault demo
+        RecordsActivity.java     &larr; Second screen: ListView of records
+        RecordManager.java       &larr; Singleton in-memory record storage
+      res/
+        layout/
+          activity_main.xml      &larr; Main UI with instructions + fault toggle
+          activity_records.xml   &larr; ListView + empty state
+        menu/
+          options_menu.xml       &larr; 4 menu items with stable IDs
+        values/
+          strings.xml            &larr; All user-facing text
+          themes.xml             &larr; Material3 DayNight theme
+        AndroidManifest.xml      &larr; Declares both activities, parent link</div>
+<div class="note warn"><p>&#9888;&#65039; <b>Watch out.</b> The theme MUST inherit from <code>Theme.Material3.DayNight</code> (or <code>Theme.MaterialComponents</code>) to support modern UI components. A plain AppCompat theme would work for this simple app but Material3 is the current standard and provides better defaults.</p></div>
+
+<h2>3 &middot; Menu Resource (res/menu/options_menu.xml)</h2>
+<p>The menu is declared in XML. Each item has a stable ID (<code>R.id.menu_*</code>), a title from strings.xml, an optional system icon, and a <code>showAsAction</code> attribute controlling action bar visibility.</p>
+<figure class="code"><figcaption>res/menu/options_menu.xml <b>&middot; complete</b></figcaption><pre><span class="l"><i class="c"><?xml version="1.0" encoding="utf-8"?></i></span>
+<span class="l"><i class="k"><menu</i> <i class="a">xmlns:android</i>=<i class="s">"http://schemas.android.com/apk/res/android"</i></span>
+<span class="l">    <i class="a">xmlns:app</i>=<i class="s">"http://schemas.android.com/apk/res-auto"</i><i class="k">></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Add Record --></i></span>
+<span class="l">    <i class="k"><item</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/menu_add_record"</i></span>
+<span class="l">        <i class="a">android:title</i>=<i class="s">"@string/menu_add_record"</i></span>
+<span class="l">        <i class="a">android:icon</i>=<i class="s">"@android:drawable/ic_menu_add"</i></span>
+<span class="l">        <i class="a">app:showAsAction</i>=<i class="s">"ifRoom|withText"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- View Records --></i></span>
+<span class="l">    <i class="k"><item</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/menu_view_records"</i></span>
+<span class="l">        <i class="a">android:title</i>=<i class="s">"@string/menu_view_records"</i></span>
+<span class="l">        <i class="a">android:icon</i>=<i class="s">"@android:drawable/ic_menu_view"</i></span>
+<span class="l">        <i class="a">app:showAsAction</i>=<i class="s">"ifRoom|withText"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- About --></i></span>
+<span class="l">    <i class="k"><item</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/menu_about"</i></span>
+<span class="l">        <i class="a">android:title</i>=<i class="s">"@string/menu_about"</i></span>
+<span class="l">        <i class="a">android:icon</i>=<i class="s">"@android:drawable/ic_menu_info_details"</i></span>
+<span class="l">        <i class="a">app:showAsAction</i>=<i class="s">"never"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Toggle Fault Demo --></i></span>
+<span class="l">    <i class="k"><item</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/menu_toggle_fault"</i></span>
+<span class="l">        <i class="a">android:title</i>=<i class="s">"@string/menu_toggle_fault"</i></span>
+<span class="l">        <i class="a">android:icon</i>=<i class="s">"@android:drawable/ic_menu_manage"</i></span>
+<span class="l">        <i class="a">app:showAsAction</i>=<i class="s">"never"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l"><i class="k"></menu></i></span>
+</pre></figure>
+
+<h2>4 &middot; Main Activity Layout (res/layout/activity_main.xml)</h2>
+<p>The main screen uses <code>ConstraintLayout</sub> for flexible positioning. It displays the app title, instructional text explaining the three menu actions, a button to toggle the fault demo, and a status indicator showing whether the fault mode is active.</p>
+
+<h3>4.1 Title & Instructions</h3>
+<figure class="code"><figcaption>activity_main.xml <b>&middot; header & instructions</b></figcaption><pre><span class="l"><i class="c"><!-- Title --></i></span>
+<span class="l"><i class="k"><TextView</i></span>
+<span class="l">    <i class="a">android:id</i>=<i class="s">"@+id/textViewTitle"</i></span>
+<span class="l">    <i class="a">android:layout_width</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:text</i>=<i class="s">"@string/app_name"</i></span>
+<span class="l">    <i class="a">android:textSize</i>=<i class="s">"28sp"</i></span>
+<span class="l">    <i class="a">android:textStyle</i>=<i class="s">"bold"</i></span>
+<span class="l">    <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintTop_toTopOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">android:layout_marginTop</i>=<i class="s">"32dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l"><i class="c"><!-- Subtitle --></i></span>
+<span class="l"><i class="k"><TextView</i></span>
+<span class="l">    <i class="a">android:id</i>=<i class="s">"@+id/textViewSubtitle"</i></span>
+<span class="l">    <i class="a">android:layout_width</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:text</i>=<i class="s">"Options Menu Demo\nICS 2300 - Lab 3 Homework 3"</i></span>
+<span class="l">    <i class="a">android:textSize</i>=<i class="s">"16sp"</i></span>
+<span class="l">    <i class="a">android:textColor</i>=<i class="s">"@android:color/darker_gray"</i></span>
+<span class="l">    <i class="a">android:gravity</i>=<i class="s">"center"</i></span>
+<span class="l">    <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/textViewTitle"</i></span>
+<span class="l">    <i class="a">android:layout_marginTop</i>=<i class="s">"8dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l"><i class="c"><!-- Divider --></i></span>
+<span class="l"><i class="k"><View</i></span>
+<span class="l">    <i class="a">android:id</i>=<i class="s">"@+id/divider"</i></span>
+<span class="l">    <i class="a">android:layout_width</i>=<i class="s">"match_parent"</i></span>
+<span class="l">    <i class="a">android:layout_height</i>=<i class="s">"1dp"</i></span>
+<span class="l">    <i class="a">android:background</i>=<i class="s">"@android:color/darker_gray"</i></span>
+<span class="l">    <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/textViewSubtitle"</i></span>
+<span class="l">    <i class="a">android:layout_marginTop</i>=<i class="s">"24dp"</i></span>
+<span class="l">    <i class="a">android:layout_marginBottom</i>=<i class="s">"24dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l"><i class="c"><!-- Instruction Text (from strings.xml) --></i></span>
+<span class="l"><i class="k"><TextView</i></span>
+<span class="l">    <i class="a">android:id</i>=<i class="s">"@+id/textViewInstructions"</i></span>
+<span class="l">    <i class="a">android:layout_width</i>=<i class="s">"0dp"</i></span>
+<span class="l">    <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:text</i>=<i class="s">"@string/instructions_main"</i></span>
+<span class="l">    <i class="a">android:textSize</i>=<i class="s">"14sp"</i></span>
+<span class="l">    <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/divider"</i></span>
+<span class="l">    <i class="a">android:layout_marginHorizontal</i>=<i class="s">"16dp"</i> <i class="k">/></i></span>
+</pre></figure>
+
+<h3>4.2 Fault Demo Toggle & Status</h3>
+<figure class="code"><figcaption>activity_main.xml <b>&middot; fault toggle & status</b></figcaption><pre><span class="l"><i class="c"><!-- Fault Demo Toggle Button --></i></span>
+<span class="l"><i class="k"><Button</i></span>
+<span class="l">    <i class="a">android:id</i>=<i class="s">"@+id/buttonToggleFault"</i></span>
+<span class="l">    <i class="a">android:layout_width</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:text</i>=<i class="s">"@string/toggle_fault_demo"</i></span>
+<span class="l">    <i class="a">android:onClick</i>=<i class="s">"onToggleFaultClick"</i></span>
+<span class="l">    <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/textViewInstructions"</i></span>
+<span class="l">    <i class="a">android:layout_marginTop</i>=<i class="s">"32dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l"><i class="c"><!-- Status Indicator --></i></span>
+<span class="l"><i class="k"><TextView</i></span>
+<span class="l">    <i class="a">android:id</i>=<i class="s">"@+id/textViewFaultStatus"</i></span>
+<span class="l">    <i class="a">android:layout_width</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:text</i>=<i class="s">"@string/fault_status_off"</i></span>
+<span class="l">    <i class="a">android:textSize</i>=<i class="s">"14sp"</i></span>
+<span class="l">    <i class="a">android:textColor</i>=<i class="s">"@android:color/holo_green_dark"</i></span>
+<span class="l">    <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/buttonToggleFault"</i></span>
+<span class="l">    <i class="a">android:layout_marginTop</i>=<i class="s">"16dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l"><i class="c"><!-- Menu Reference --></i></span>
+<span class="l"><i class="k"><TextView</i></span>
+<span class="l">    <i class="a">android:id</i>=<i class="s">"@+id/textViewMenuRef"</i></span>
+<span class="l">    <i class="a">android:layout_width</i>=<i class="s">"0dp"</i></span>
+<span class="l">    <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">    <i class="a">android:text</i>=<i class="s">"@string/menu_reference"</i></span>
+<span class="l">    <i class="a">android:textSize</i>=<i class="s">"13sp"</i></span>
+<span class="l">    <i class="a">android:textColor</i>=<i class="s">"@android:color/darker_gray"</i></span>
+<span class="l">    <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">    <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/textViewFaultStatus"</i></span>
+<span class="l">    <i class="a">android:layout_marginTop</i>=<i class="s">"32dp"</i></span>
+<span class="l">    <i class="a">android:layout_marginHorizontal</i>=<i class="s">"16dp"</i> <i class="k">/></i></span>
+</pre></figure>
+
+<h3>4.3 Complete Layout File</h3>
+<details><summary>activity_main.xml &middot; complete &mdash; click to expand</summary><figure class="code"><figcaption>activity_main.xml <b>&middot; complete</b></figcaption><pre><span class="l"><i class="c"><?xml version="1.0" encoding="utf-8"?></i></span>
+<span class="l"><i class="k"><androidx.constraintlayout.widget.ConstraintLayout</i></span>
+<span class="l">    <i class="a">xmlns:android</i>=<i class="s">"http://schemas.android.com/apk/res/android"</i></span>
+<span class="l">    <i class="a">xmlns:app</i>=<i class="s">"http://schemas.android.com/apk/res-auto"</i></span>
+<span class="l">    <i class="a">xmlns:tools</i>=<i class="s">"http://schemas.android.com/tools"</i></span>
+<span class="l">    <i class="a">android:id</i>=<i class="s">"@+id/main"</i></span>
+<span class="l">    <i class="a">android:layout_width</i>=<i class="s">"match_parent"</i></span>
+<span class="l">    <i class="a">android:layout_height</i>=<i class="s">"match_parent"</i></span>
+<span class="l">    <i class="a">android:padding</i>=<i class="s">"16dp"</i></span>
+<span class="l">    <i class="a">tools:context</i>=<i class="s">".MainActivity"></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Title --></i></span>
+<span class="l">    <i class="k"><TextView</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/textViewTitle"</i></span>
+<span class="l">        <i class="a">android:layout_width</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:text</i>=<i class="s">"@string/app_name"</i></span>
+<span class="l">        <i class="a">android:textSize</i>=<i class="s">"28sp"</i></span>
+<span class="l">        <i class="a">android:textStyle</i>=<i class="s">"bold"</i></span>
+<span class="l">        <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintTop_toTopOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">android:layout_marginTop</i>=<i class="s">"32dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Subtitle --></i></span>
+<span class="l">    <i class="k"><TextView</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/textViewSubtitle"</i></span>
+<span class="l">        <i class="a">android:layout_width</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:text</i>=<i class="s">"Options Menu Demo\nICS 2300 - Lab 3 Homework 3"</i></span>
+<span class="l">        <i class="a">android:textSize</i>=<i class="s">"16sp"</i></span>
+<span class="l">        <i class="a">android:textColor</i>=<i class="s">"@android:color/darker_gray"</i></span>
+<span class="l">        <i class="a">android:gravity</i>=<i class="s">"center"</i></span>
+<span class="l">        <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/textViewTitle"</i></span>
+<span class="l">        <i class="a">android:layout_marginTop</i>=<i class="s">"8dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Divider --></i></span>
+<span class="l">    <i class="k"><View</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/divider"</i></span>
+<span class="l">        <i class="a">android:layout_width</i>=<i class="s">"match_parent"</i></span>
+<span class="l">        <i class="a">android:layout_height</i>=<i class="s">"1dp"</i></span>
+<span class="l">        <i class="a">android:background</i>=<i class="s">"@android:color/darker_gray"</i></span>
+<span class="l">        <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/textViewSubtitle"</i></span>
+<span class="l">        <i class="a">android:layout_marginTop</i>=<i class="s">"24dp"</i></span>
+<span class="l">        <i class="a">android:layout_marginBottom</i>=<i class="s">"24dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Instruction Text --></i></span>
+<span class="l">    <i class="k"><TextView</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/textViewInstructions"</i></span>
+<span class="l">        <i class="a">android:layout_width</i>=<i class="s">"0dp"</i></span>
+<span class="l">        <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:text</i>=<i class="s">"@string/instructions_main"</i></span>
+<span class="l">        <i class="a">android:textSize</i>=<i class="s">"14sp"</i></span>
+<span class="l">        <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/divider"</i></span>
+<span class="l">        <i class="a">android:layout_marginHorizontal</i>=<i class="s">"16dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Fault Demo Toggle Button --></i></span>
+<span class="l">    <i class="k"><Button</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/buttonToggleFault"</i></span>
+<span class="l">        <i class="a">android:layout_width</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:text</i>=<i class="s">"@string/toggle_fault_demo"</i></span>
+<span class="l">        <i class="a">android:onClick</i>=<i class="s">"onToggleFaultClick"</i></span>
+<span class="l">        <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/textViewInstructions"</i></span>
+<span class="l">        <i class="a">android:layout_marginTop</i>=<i class="s">"32dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Status Indicator --></i></span>
+<span class="l">    <i class="k"><TextView</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/textViewFaultStatus"</i></span>
+<span class="l">        <i class="a">android:layout_width</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:text</i>=<i class="s">"@string/fault_status_off"</i></span>
+<span class="l">        <i class="a">android:textSize</i>=<i class="s">"14sp"</i></span>
+<span class="l">        <i class="a">android:textColor</i>=<i class="s">"@android:color/holo_green_dark"</i></span>
+<span class="l">        <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/buttonToggleFault"</i></span>
+<span class="l">        <i class="a">android:layout_marginTop</i>=<i class="s">"16dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Menu Reference --></i></span>
+<span class="l">    <i class="k"><TextView</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/textViewMenuRef"</i></span>
+<span class="l">        <i class="a">android:layout_width</i>=<i class="s">"0dp"</i></span>
+<span class="l">        <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:text</i>=<i class="s">"@string/menu_reference"</i></span>
+<span class="l">        <i class="a">android:textSize</i>=<i class="s">"13sp"</i></span>
+<span class="l">        <i class="a">android:textColor</i>=<i class="s">"@android:color/darker_gray"</i></span>
+<span class="l">        <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintTop_toBottomOf</i>=<i class="s">"@id/textViewFaultStatus"</i></span>
+<span class="l">        <i class="a">android:layout_marginTop</i>=<i class="s">"32dp"</i></span>
+<span class="l">        <i class="a">android:layout_marginHorizontal</i>=<i class="s">"16dp"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l"><i class="k"></androidx.constraintlayout.widget.ConstraintLayout></i></span>
+</pre></figure></details>
+
+<h2>5 &middot; Records Activity Layout (res/layout/activity_records.xml)</h2>
+<p>The second screen displays stored records in a <code>ListView</code>. An empty-state <code>TextView</code> is shown when no records exist. Both views share the same constraints; visibility is toggled programmatically in <code>RecordsActivity</code>.</p>
+<figure class="code"><figcaption>activity_records.xml <b>&middot; complete</b></figcaption><pre><span class="l"><i class="c"><?xml version="1.0" encoding="utf-8"?></i></span>
+<span class="l"><i class="k"><androidx.constraintlayout.widget.ConstraintLayout</i></span>
+<span class="l">    <i class="a">xmlns:android</i>=<i class="s">"http://schemas.android.com/apk/res/android"</i></span>
+<span class="l">    <i class="a">xmlns:app</i>=<i class="s">"http://schemas.android.com/apk/res-auto"</i></span>
+<span class="l">    <i class="a">xmlns:tools</i>=<i class="s">"http://schemas.android.com/tools"</i></span>
+<span class="l">    <i class="a">android:id</i>=<i class="s">"@+id/records_main"</i></span>
+<span class="l">    <i class="a">android:layout_width</i>=<i class="s">"match_parent"</i></span>
+<span class="l">    <i class="a">android:layout_height</i>=<i class="s">"match_parent"</i></span>
+<span class="l">    <i class="a">tools:context</i>=<i class="s">".RecordsActivity"></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Empty State (initially hidden) --></i></span>
+<span class="l">    <i class="k"><TextView</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/textViewEmpty"</i></span>
+<span class="l">        <i class="a">android:layout_width</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:layout_height</i>=<i class="s">"wrap_content"</i></span>
+<span class="l">        <i class="a">android:text</i>=<i class="s">"@string/empty_records_list"</i></span>
+<span class="l">        <i class="a">android:textSize</i>=<i class="s">"16sp"</i></span>
+<span class="l">        <i class="a">android:textColor</i>=<i class="s">"@android:color/darker_gray"</i></span>
+<span class="l">        <i class="a">android:gravity</i>=<i class="s">"center"</i></span>
+<span class="l">        <i class="a">android:layout_margin</i>=<i class="s">"24dp"</i></span>
+<span class="l">        <i class="a">android:visibility</i>=<i class="s">"gone"</i></span>
+<span class="l">        <i class="a">app:layout_constraintBottom_toBottomOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintTop_toTopOf</i>=<i class="s">"parent"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Records List --></i></span>
+<span class="l">    <i class="k"><ListView</i></span>
+<span class="l">        <i class="a">android:id</i>=<i class="s">"@+id/listViewRecords"</i></span>
+<span class="l">        <i class="a">android:layout_width</i>=<i class="s">"0dp"</i></span>
+<span class="l">        <i class="a">android:layout_height</i>=<i class="s">"0dp"</i></span>
+<span class="l">        <i class="a">android:layout_margin</i>=<i class="s">"16dp"</i></span>
+<span class="l">        <i class="a">android:divider</i>=<i class="s">"@android:color/darker_gray"</i></span>
+<span class="l">        <i class="a">android:dividerHeight</i>=<i class="s">"1dp"</i></span>
+<span class="l">        <i class="a">android:visibility</i>=<i class="s">"visible"</i></span>
+<span class="l">        <i class="a">app:layout_constraintBottom_toBottomOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintEnd_toEndOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintStart_toStartOf</i>=<i class="s">"parent"</i></span>
+<span class="l">        <i class="a">app:layout_constraintTop_toTopOf</i>=<i class="s">"parent"</i> <i class="k">/></i></span>
+<span class="l"></span>
+<span class="l"><i class="k"></androidx.constraintlayout.widget.ConstraintLayout></i></span>
+</pre></figure>
+
+<h2>6 &middot; AndroidManifest.xml</h2>
+<p>Both activities are declared. <code>RecordsActivity</code> specifies <code>MainActivity</code> as its parent for proper Up/Back navigation. The MAIN/LAUNCHER intent filter is only on <code>MainActivity</code>.</p>
+<figure class="code"><figcaption>AndroidManifest.xml <b>&middot; activity declarations</b></figcaption><pre><span class="l"><i class="c"><?xml version="1.0" encoding="utf-8"?></i></span>
+<span class="l"><i class="k"><manifest</i> <i class="a">xmlns:android</i>=<i class="s">"http://schemas.android.com/apk/res/android"</i></span>
+<span class="l">    <i class="a">xmlns:tools</i>=<i class="s">"http://schemas.android.com/tools"></i></span>
+<span class="l"></span>
+<span class="l">    <i class="k"><application</i></span>
+<span class="l">        <i class="a">android:allowBackup</i>=<i class="s">"true"</i></span>
+<span class="l">        <i class="a">android:icon</i>=<i class="s">"@mipmap/ic_launcher"</i></span>
+<span class="l">        <i class="a">android:label</i>=<i class="s">"@string/app_name"</i></span>
+<span class="l">        <i class="a">android:theme</i>=<i class="s">"@style/Theme.Options_menu"></i></span>
+<span class="l"></span>
+<span class="l">        <i class="c"><!-- Main Activity --></i></span>
+<span class="l">        <i class="k"><activity</i></span>
+<span class="l">            <i class="a">android:name</i>=<i class="s">".MainActivity"</i></span>
+<span class="l">            <i class="a">android:exported</i>=<i class="s">"true"</i></span>
+<span class="l">            <i class="a">android:windowSoftInputMode</i>=<i class="s">"adjustResize"></i></span>
+<span class="l">            <i class="k"><intent-filter></i></span>
+<span class="l">                <i class="k"><action</i> <i class="a">android:name</i>=<i class="s">"android.intent.action.MAIN"</i> <i class="k">/></i></span>
+<span class="l">                <i class="k"><category</i> <i class="a">android:name</i>=<i class="s">"android.intent.category.LAUNCHER"</i> <i class="k">/></i></span>
+<span class="l">            <i class="k"></intent-filter></i></span>
+<span class="l">        <i class="k"></activity></i></span>
+<span class="l"></span>
+<span class="l">        <i class="c"><!-- Records Activity --></i></span>
+<span class="l">        <i class="k"><activity</i></span>
+<span class="l">            <i class="a">android:name</i>=<i class="s">".RecordsActivity"</i></span>
+<span class="l">            <i class="a">android:exported</i>=<i class="s">"false"</i></span>
+<span class="l">            <i class="a">android:parentActivityName</i>=<i class="s">".MainActivity"</i></span>
+<span class="l">            <i class="a">android:windowSoftInputMode</i>=<i class="s">"adjustResize"></i></span>
+<span class="l">            <i class="k"><meta-data</i></span>
+<span class="l">                <i class="a">android:name</i>=<i class="s">"android.support.PARENT_ACTIVITY"</i></span>
+<span class="l">                <i class="a">android:value</i>=<i class="s">".MainActivity"</i> <i class="k">/></i></span>
+<span class="l">        <i class="k"></activity></i></span>
+<span class="l"></span>
+<span class="l">    <i class="k"></application></i></span>
+<span class="l"><i class="k"></manifest></i></span>
+</pre></figure>
+
+<h2>7 &middot; MainActivity.java &mdash; Imports & Fields</h2>
+<h3>7.1 Imports</h3>
+<p>All necessary Android framework classes are imported. Note the use of <code>androidx.appcompat.app.AlertDialog</code> and the Material3 theme compatibility.</p>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; imports</b></figcaption><pre><span class="l"><i class="k">package</i> com.example.options_menu;</span>
+<span class="l"></span>
+<span class="l"><i class="k">import</i> android.content.<i class="t">Intent</i>;</span>
+<span class="l"><i class="k">import</i> android.os.<i class="t">Bundle</i>;</span>
+<span class="l"><i class="k">import</i> android.util.<i class="t">Log</i>;</span>
+<span class="l"><i class="k">import</i> android.view.<i class="t">Menu</i>;</span>
+<span class="l"><i class="k">import</i> android.view.<i class="t">MenuItem</i>;</span>
+<span class="l"><i class="k">import</i> android.view.<i class="t">View</i>;</span>
+<span class="l"><i class="k">import</i> android.widget.<i class="t">TextView</i>;</span>
+<span class="l"><i class="k">import</i> android.widget.<i class="t">Toast</i>;</span>
+<span class="l"></span>
+<span class="l"><i class="k">import</i> androidx.activity.<i class="t">EdgeToEdge</i>;</span>
+<span class="l"><i class="k">import</i> androidx.appcompat.app.<i class="t">AlertDialog</i>;</span>
+<span class="l"><i class="k">import</i> androidx.appcompat.app.<i class="t">AppCompatActivity</i>;</span>
+<span class="l"><i class="k">import</i> androidx.core.graphics.<i class="t">Insets</i>;</span>
+<span class="l"><i class="k">import</i> androidx.core.view.<i class="t">ViewCompat</i>;</span>
+<span class="l"><i class="k">import</i> androidx.core.view.<i class="t">WindowInsetsCompat</i>;</span>
+</pre></figure>
+
+<h3>7.2 Class Definition & Fields</h3>
+<p>A single boolean field tracks the fault demonstration state. It is persisted across configuration changes via <code>onSaveInstanceState()</code>.</p>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; fields</b></figcaption><pre><span class="l"><i class="k">public</i> <i class="k">class</i> <i class="t">MainActivity</i> <i class="k">extends</i> <i class="t">AppCompatActivity</i> {</span>
+<span class="l"></span>
+<span class="l">    <i class="k">private</i> <i class="k">static</i> <i class="k">final</i> <i class="t">String</i> TAG = <i class="s">"MainActivity"</i>;</span>
+<span class="l"></span>
+<span class="l">    <i class="c">// Flag to demonstrate fault: when true, uses WRONG item ID in handler</i></span>
+<span class="l">    <i class="k">private</i> <i class="k">boolean</i> demonstrateFault = <i class="k">false</i>;</span>
+<span class="l"></span>
+<span class="l">    <i class="a">@Override</i></span>
+<span class="l">    <i class="k">protected</i> <i class="k">void</i> onCreate(<i class="t">Bundle</i> savedInstanceState) { <i class="c">// ...</i> }</span>
+<span class="l">}</pre></figure>
+
+<h2>8 &middot; MainActivity.java &mdash; onCreate & Menu Inflation</h2>
+<h3>8.1 onCreate() &mdash; View Binding & State Restoration</h3>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; onCreate</b></figcaption><pre><span class="l">    <i class="a">@Override</i></span>
+<span class="l">    <i class="k">protected</i> <i class="k">void</i> onCreate(<i class="t">Bundle</i> savedInstanceState) {</span>
+<span class="l">        <i class="k">super</i>.onCreate(savedInstanceState);</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"onCreate called"</i>);</span>
+<span class="l">        <i class="t">EdgeToEdge</i>.enable(<i class="k">this</i>);</span>
+<span class="l">        setContentView(<i class="t">R</i>.layout.activity_main);</span>
+<span class="l"></span>
+<span class="l">        <i class="t">ViewCompat</i>.setOnApplyWindowInsetsListener(</span>
+<span class="l">            findViewById(<i class="t">R</i>.id.main), (v, insets) -> {</span>
+<span class="l">                <i class="t">Insets</i> systemBars = insets.getInsets(</span>
+<span class="l">                    <i class="t">WindowInsetsCompat</i>.Type.systemBars());</span>
+<span class="l">                v.setPadding(systemBars.left, systemBars.top,</span>
+<span class="l">                    systemBars.right, systemBars.bottom);</span>
+<span class="l">                <i class="k">return</i> insets;</span>
+<span class="l">            });</span>
+<span class="l"></span>
+<span class="l">        <i class="c">// Restore fault demonstration state if activity recreated</i></span>
+<span class="l">        <i class="k">if</i> (savedInstanceState != <i class="k">null</i>) {</span>
+<span class="l">            demonstrateFault = savedInstanceState.</span>
+<span class="l">                getBoolean(<i class="s">"demonstrateFault"</i>, <i class="k">false</i>);</span>
+<span class="l">            <i class="t">Log</i>.d(TAG, <i class="s">"Restored demonstrateFault: "</i> + demonstrateFault);</span>
+<span class="l">        }</span>
+<span class="l">    }</span>
+</pre></figure>
+
+<h3>8.2 onSaveInstanceState() &mdash; Persisting the Flag</h3>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; onSaveInstanceState</b></figcaption><pre><span class="l">    <i class="a">@Override</i></span>
+<span class="l">    <i class="k">protected</i> <i class="k">void</i> onSaveInstanceState(<i class="t">Bundle</i> outState) {</span>
+<span class="l">        <i class="k">super</i>.onSaveInstanceState(outState);</span>
+<span class="l">        outState.putBoolean(<i class="s">"demonstrateFault"</i>, demonstrateFault);</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"Saved demonstrateFault: "</i> + demonstrateFault);</span>
+<span class="l">    }</span>
+</pre></figure>
+
+<h3>8.3 onCreateOptionsMenu() &mdash; Attaching the Menu</h3>
+<p>This is where the menu resource is inflated and attached to the Activity's action bar. Returning true tells the system the menu should be shown.</p>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; onCreateOptionsMenu</b></figcaption><pre><span class="l">    <i class="a">@Override</i></span>
+<span class="l">    <i class="k">public</i> <i class="k">boolean</i> onCreateOptionsMenu(<i class="t">Menu</i> menu) {</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"onCreateOptionsMenu called"</i>);</span>
+<span class="l">        getMenuInflater().inflate(<i class="t">R</i>.menu.options_menu, menu);</span>
+<span class="l">        <i class="k">return</i> <i class="k">true</i>;</span>
+<span class="l">    }</span>
+</pre></figure>
+
+<h2>9 &middot; MainActivity.java &mdash; onOptionsItemSelected()</h2>
+<p>This method is the central routing point for all menu selections. It uses a switch-like if/else chain on the stable item ID. When the fault demo is active, it deliberately substitutes the <b>WRONG</b> item ID to demonstrate the symptom of incorrect ID handling.</p>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; onOptionsItemSelected</b></figcaption><pre><span class="l">    <i class="a">@Override</i></span>
+<span class="l">    <i class="k">public</i> <i class="k">boolean</i> onOptionsItemSelected(<i class="t">MenuItem</i> item) {</span>
+<span class="l">        <i class="k">int</i> itemId = item.getItemId();</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"onOptionsItemSelected: itemId="</i> + itemId</span>
+<span class="l">            + <i class="s">", demonstrateFault="</i> + demonstrateFault);</span>
+<span class="l"></span>
+<span class="l">        <i class="c">// DEMONSTRATE FAULT: Use incorrect ID when flag is set</i></span>
+<span class="l">        <i class="c">// This simulates a common bug where developer uses wrong constant</i></span>
+<span class="l">        <i class="k">int</i> effectiveItemId = demonstrateFault</span>
+<span class="l">            ? <i class="t">R</i>.id.menu_view_records  <i class="c">// WRONG ID</i></span>
+<span class="l">            : itemId;                  <i class="c">// CORRECT ID</i></span>
+<span class="l"></span>
+<span class="l">        <i class="k">if</i> (effectiveItemId != itemId) {</span>
+<span class="l">            <i class="t">Log</i>.w(TAG, <i class="s">"FAULT DEMONSTRATION: Using wrong ID "</i></span>
+<span class="l">                + effectiveItemId + <i class="s">" instead of "</i> + itemId);</span>
+<span class="l">        }</span>
+<span class="l"></span>
+<span class="l">        <i class="k">if</i> (effectiveItemId == <i class="t">R</i>.id.menu_add_record) {</span>
+<span class="l">            handleAddRecord();</span>
+<span class="l">            <i class="k">return</i> <i class="k">true</i>;</span>
+<span class="l">        } <i class="k">else if</i> (effectiveItemId == <i class="t">R</i>.id.menu_view_records) {</span>
+<span class="l">            handleViewRecords();</span>
+<span class="l">            <i class="k">return</i> <i class="k">true</i>;</span>
+<span class="l">        } <i class="k">else if</i> (effectiveItemId == <i class="t">R</i>.id.menu_about) {</span>
+<span class="l">            handleAbout();</span>
+<span class="l">            <i class="k">return</i> <i class="k">true</i>;</span>
+<span class="l">        } <i class="k">else if</i> (itemId == <i class="t">R</i>.id.menu_toggle_fault) {</span>
+<span class="l">            <i class="c">// Control item uses actual itemId, not effectiveItemId</i></span>
+<span class="l">            onToggleFaultClick(<i class="k">null</i>);</span>
+<span class="l">            <i class="k">return</i> <i class="k">true</i>;</span>
+<span class="l">        }</span>
+<span class="l"></span>
+<span class="l">        <i class="c">// Safe fallback for unhandled items</i></span>
+<span class="l">        <i class="t">Log</i>.w(TAG, <i class="s">"Unhandled menu item ID: "</i> + itemId);</span>
+<span class="l">        <i class="t">Toast</i>.makeText(<i class="k">this</i>, <i class="s">"Unknown action"</i>, <i class="t">Toast</i>.LENGTH_SHORT).show();</span>
+<span class="l">        <i class="k">return</i> <i class="k">super</i>.onOptionsItemSelected(item);</span>
+<span class="l">    }</span>
+</pre></figure>
+
+<div class="note tip"><p>&#128161; <b>Why use item ID instead of displayed label?</b> Stable IDs (<code>R.id.menu_add_record</code>) are compile-time constants that never change. Display labels are user-facing strings that can change due to localization, UI redesign, A/B testing, or accessibility adjustments. If code compared against the label text, any of these changes would silently break the handler. IDs provide a stable contract between XML declaration and Java logic.</p></div>
+
+<h2>10 &middot; MainActivity.java &mdash; Action Handlers</h2>
+
+<h3>10.1 handleAddRecord() &mdash; Toast Feedback + Data Update</h3>
+<p>Shows a brief Toast, adds a timestamped record to the singleton manager, then shows a confirmation Toast. Toasts are appropriate here because the action succeeds immediately and requires no user acknowledgment.</p>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; handleAddRecord</b></figcaption><pre><span class="l">    <i class="k">private</i> <i class="k">void</i> handleAddRecord() {</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"handleAddRecord called"</i>);</span>
+<span class="l"></span>
+<span class="l">        <i class="c">// Brief non-critical feedback via Toast</i></span>
+<span class="l">        <i class="t">Toast</i>.makeText(<i class="k">this</i>, <i class="t">R</i>.string.toast_add_record,</span>
+<span class="l">            <i class="t">Toast</i>.LENGTH_SHORT).show();</span>
+<span class="l"></span>
+<span class="l">        <i class="c">// Add a new record to the shared manager</i></span>
+<span class="l">        <i class="t">String</i> newRecord = <i class="s">"Record #"</i></span>
+<span class="l">            + (<i class="t">RecordManager</i>.getInstance().getCount() + 1)</span>
+<span class="l">            + <i class="s">" - Added at "</i></span>
+<span class="l">            + java.time.<i class="t">LocalTime</i>.now().toString().substring(0, 8);</span>
+<span class="l">        <i class="t">RecordManager</i>.getInstance().addRecord(newRecord);</span>
+<span class="l"></span>
+<span class="l">        <i class="c">// Follow-up confirmation Toast</i></span>
+<span class="l">        <i class="t">Toast</i>.makeText(<i class="k">this</i>, <i class="t">R</i>.string.toast_record_added,</span>
+<span class="l">            <i class="t">Toast</i>.LENGTH_SHORT).show();</span>
+<span class="l"></span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"Record added: "</i> + newRecord);</span>
+<span class="l">    }</span>
+</pre></figure>
+
+<h3>10.2 handleViewRecords() &mdash; Screen Navigation</h3>
+<p>Launches <code>RecordsActivity</code> via explicit Intent. The event path and Back behavior are documented in the method comments.</p>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; handleViewRecords</b></figcaption><pre><span class="l">    <i class="k">private</i> <i class="k">void</i> handleViewRecords() {</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"handleViewRecords called - starting RecordsActivity"</i>);</span>
+<span class="l"></span>
+<span class="l">        <i class="t">Toast</i>.makeText(<i class="k">this</i>, <i class="t">R</i>.string.toast_view_records,</span>
+<span class="l">            <i class="t">Toast</i>.LENGTH_SHORT).show();</span>
+<span class="l"></span>
+<span class="l">        <i class="t">Intent</i> intent = <i class="k">new</i> <i class="t">Intent</i>(<i class="k">this</i>, <i class="t">RecordsActivity</i>.<i class="k">class</i>);</span>
+<span class="l">        startActivity(intent);</span>
+<span class="l">    }</span>
+</pre></figure>
+
+<h3>10.3 handleAbout() &mdash; Modal Dialog (Not Toast)</h3>
+<p>Shows an <code>AlertDialog</code> with app information. This is a case where Toast is <b>UNSUITABLE</b> — the content is multi-line, must remain visible until dismissed, and provides meaningful information the user may want to read fully.</p>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; handleAbout</b></figcaption><pre><span class="l">    <i class="k">private</i> <i class="k">void</i> handleAbout() {</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"handleAbout called"</i>);</span>
+<span class="l"></span>
+<span class="l">        <i class="t">Toast</i>.makeText(<i class="k">this</i>, <i class="t">R</i>.string.toast_about,</span>
+<span class="l">        <i class="t">Toast</i>.LENGTH_SHORT).show();</span>
+<span class="l"></span>
+<span class="l">        <i class="k">new</i> <i class="t">AlertDialog</i>.<i class="t">Builder</i>(<i class="k">this</i>)</span>
+<span class="l">            .setTitle(<i class="t">R</i>.string.about_title)</span>
+<span class="l">            .setMessage(<i class="t">R</i>.string.about_message)</span>
+<span class="l">            .setPositiveButton(<i class="t">R</i>.string.about_ok, <i class="k">null</i>)</span>
+<span class="l">            .show();</span>
+<span class="l">    }</span>
+</pre></figure>
+
+<div class="note tip"><p>&#128161; <b>When is Toast UNSUITABLE feedback?</b> Toast should NOT be used when: (1) The message is long or multi-line — toasts clip text and have no scrolling. (2) User acknowledgment is required — toasts vanish without interaction. (3) Content is critical (errors, warnings, security alerts) — must persist. (4) Information must be copied or referenced — toasts cannot be selected. (5) Context switch occurs — toast may show on wrong screen after navigation. In those cases, use <code>AlertDialog</code>, <code>Snackbar</code> (with action), or a dedicated UI state.</p></div>
+
+<h2>11 &middot; MainActivity.java &mdash; Fault Demonstration</h2>
+
+<h3>11.1 Toggle Fault Handler</h3>
+<p>Called from both the UI button and the menu item. Updates the flag, refreshes the status <code>TextView</code>, shows Toast feedback, and when enabling, displays the explanatory <code>AlertDialog</code>.</p>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; onToggleFaultClick</b></figcaption><pre><span class="l">    <i class="k">public</i> <i class="k">void</i> onToggleFaultClick(<i class="t">View</i> view) {</span>
+<span class="l">        demonstrateFault = !demonstrateFault;</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"Fault demo toggled via button: "</i> + demonstrateFault);</span>
+<span class="l"></span>
+<span class="l">        <i class="c">// Update status text</i></span>
+<span class="l">        <i class="t">TextView</i> statusText = findViewById(<i class="t">R</i>.id.textViewFaultStatus);</span>
+<span class="l">        <i class="k">if</i> (demonstrateFault) {</span>
+<span class="l">            statusText.setText(<i class="t">R</i>.string.fault_status_on);</span>
+<span class="l">            statusText.setTextColor(getColor(android.<i class="t">R</i>.color.holo_red_dark));</span>
+<span class="l">        } <i class="k">else</i> {</span>
+<span class="l">            statusText.setText(<i class="t">R</i>.string.fault_status_off);</span>
+<span class="l">            statusText.setTextColor(getColor(android.<i class="t">R</i>.color.holo_green_dark));</span>
+<span class="l">        }</span>
+<span class="l"></span>
+<span class="l">        <i class="c">// Show Toast feedback</i></span>
+<span class="l">        <i class="t">String</i> status = demonstrateFault</span>
+<span class="l">            ? <i class="s">"ENABLED (incorrect ID will be used)"</i></span>
+<span class="l">            : <i class="s">"DISABLED (correct ID used)"</i>;</span>
+<span class="l">        <i class="t">Toast</i>.makeText(<i class="k">this</i>, <i class="s">"Fault Demo: "</i> + status,</span>
+<span class="l">            <i class="t">Toast</i>.LENGTH_LONG).show();</span>
+<span class="l"></span>
+<span class="l">        <i class="k">if</i> (demonstrateFault) {</span>
+<span class="l">            showFaultExplanation();</span>
+<span class="l">        }</span>
+<span class="l">    }</span>
+</pre></figure>
+
+<h3>11.2 Fault Explanation Dialog</h3>
+<p>When the fault is enabled, this dialog appears to explain what was deliberately broken. This turns the fault into a teaching moment.</p>
+<figure class="code"><figcaption>MainActivity.java <b>&middot; showFaultExplanation</b></figcaption><pre><span class="l">    <i class="k">private</i> <i class="k">void</i> showFaultExplanation() {</span>
+<span class="l">        <i class="k">new</i> <i class="t">AlertDialog</i>.<i class="t">Builder</i>(<i class="k">this</i>)</span>
+<span class="l">            .setTitle(<i class="t">R</i>.string.fault_explanation_title)</span>
+<span class="l">            .setMessage(<i class="t">R</i>.string.fault_explanation_message)</span>
+<span class="l">            .setPositiveButton(<i class="t">R</i>.string.ok, <i class="k">null</i>)</span>
+<span class="l">            .show();</span>
+<span class="l">    }</span>
+</pre></figure>
+
+<h3>11.3 Fault Record: Incorrect Item ID</h3>
+<div class="note warn"><p><b>Deliberate Fault:</b> In <code>onOptionsItemSelected()</code>, when <code>demonstrateFault=true</code>, the code substitutes <code>R.id.menu_view_records</code> for the actual item ID.</p>
+<p><b>Observed Symptom:</b> User selects "Add Record" &rarr; Toast says "Opening records list&hellip;" (the View Records message) instead of "Add Record action selected". No record is added.</p>
+<p><b>Root Cause:</b> The switch/if-chain matches on the WRONG constant. The handler for View Records is executed instead of the handler for Add Record.</p>
+<p><b>Correction:</b> Toggle the fault OFF (button or menu). The code then uses the actual <code>itemId</code>: <code>effectiveItemId = itemId</code>. Selection now routes to the correct handler.</p>
+<p><b>Retest:</b> After toggling OFF, selecting "Add Record" shows the correct Toast and adds a record. Selecting "View Records" correctly opens the records screen.</p>
+<p><b>Lesson:</b> This confirms why stable IDs matter and why copy-paste errors in switch cases are dangerous &mdash; the compiler cannot detect them.</p></div>
+
+<h2>12 &middot; RecordsActivity.java &mdash; Complete Source</h2>
+<p>Displays the list of records from the shared <code>RecordManager</code>. Refreshes in <code>onResume()</code> to reflect any additions made in <code>MainActivity</code>. Uses a simple <code>ArrayAdapter</code> with the platform's <code>simple_list_item_1</code> layout.</p>
+<details><summary>RecordsActivity.java &middot; complete &mdash; click to expand</summary><figure class="code"><figcaption>RecordsActivity.java <b>&middot; complete</b></figcaption><pre><span class="l"><i class="k">package</i> com.example.options_menu;</span>
+<span class="l"></span>
+<span class="l"><i class="k">import</i> android.content.<i class="t">Intent</i>;</span>
+<span class="l"><i class="k">import</i> android.os.<i class="t">Bundle</i>;</span>
+<span class="l"><i class="k">import</i> android.util.<i class="t">Log</i>;</span>
+<span class="l"><i class="k">import</i> android.view.<i class="t">View</i>;</span>
+<span class="l"><i class="k">import</i> android.widget.<i class="t">AdapterView</i>;</span>
+<span class="l"><i class="k">import</i> android.widget.<i class="t">ArrayAdapter</i>;</span>
+<span class="l"><i class="k">import</i> android.widget.<i class="t">ListView</i>;</span>
+<span class="l"><i class="k">import</i> android.widget.<i class="t">TextView</i>;</span>
+<span class="l"><i class="k">import</i> android.widget.<i class="t">Toast</i>;</span>
+<span class="l"></span>
+<span class="l"><i class="k">import</i> androidx.activity.<i class="t">EdgeToEdge</i>;</span>
+<span class="l"><i class="k">import</i> androidx.appcompat.app.<i class="t">AppCompatActivity</i>;</span>
+<span class="l"><i class="k">import</i> androidx.core.graphics.<i class="t">Insets</i>;</span>
+<span class="l"><i class="k">import</i> androidx.core.view.<i class="t">ViewCompat</i>;</span>
+<span class="l"><i class="k">import</i> androidx.core.view.<i class="t">WindowInsetsCompat</i>;</span>
+<span class="l"></span>
+<span class="l"><i class="k">import</i> java.util.<i class="t">ArrayList</i>;</span>
+<span class="l"><i class="k">import</i> java.util.<i class="t">List</i>;</span>
+<span class="l"></span>
+<span class="l"><i class="c">/**</i></span>
+<span class="l"><i class="c"> * RecordsActivity displays the list of stored records.</i></span>
+<span class="l"><i class="c"> * Demonstrates screen change and proper Back navigation.</i></span>
+<span class="l"><i class="c"> */</i></span>
+<span class="l"><i class="k">public</i> <i class="k">class</i> <i class="t">RecordsActivity</i> <i class="k">extends</i> <i class="t">AppCompatActivity</i> {</span>
+<span class="l"></span>
+<span class="l">    <i class="k">private</i> <i class="k">static</i> <i class="k">final</i> <i class="t">String</i> TAG = <i class="s">"RecordsActivity"</i>;</span>
+<span class="l"></span>
+<span class="l">    <i class="k">private</i> <i class="t">ListView</i> listViewRecords;</span>
+<span class="l">    <i class="k">private</i> <i class="t">TextView</i> textViewEmpty;</span>
+<span class="l">    <i class="k">private</i> <i class="t">ArrayAdapter</i><i class="k"><</i><i class="t">String</i><i class="k">></i> recordsAdapter;</span>
+<span class="l">    <i class="k">private</i> <i class="t">List</i><i class="k"><</i><i class="t">String</i><i class="k">></i> recordsList;</span>
+<span class="l"></span>
+<span class="l">    <i class="a">@Override</i></span>
+<span class="l">    <i class="k">protected</i> <i class="k">void</i> onCreate(<i class="t">Bundle</i> savedInstanceState) {</span>
+<span class="l">        <i class="k">super</i>.onCreate(savedInstanceState);</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"onCreate called"</i>);</span>
+<span class="l">        <i class="t">EdgeToEdge</i>.enable(<i class="k">this</i>);</span>
+<span class="l">        setContentView(<i class="t">R</i>.layout.activity_records);</span>
+<span class="l"></span>
+<span class="l">        <i class="t">ViewCompat</i>.setOnApplyWindowInsetsListener(</span>
+<span class="l">            findViewById(<i class="t">R</i>.id.records_main), (v, insets) -> {</span>
+<span class="l">                <i class="t">Insets</i> systemBars = insets.getInsets(</span>
+<span class="l">                    <i class="t">WindowInsetsCompat</i>.Type.systemBars());</span>
+<span class="l">                v.setPadding(systemBars.left, systemBars.top,</span>
+<span class="l">                    systemBars.right, systemBars.bottom);</span>
+<span class="l">                <i class="k">return</i> insets;</span>
+<span class="l">            });</span>
+<span class="l"></span>
+<span class="l">        listViewRecords = findViewById(<i class="t">R</i>.id.listViewRecords);</span>
+<span class="l">        textViewEmpty = findViewById(<i class="t">R</i>.id.textViewEmpty);</span>
+<span class="l"></span>
+<span class="l">        recordsList = <i class="t">RecordManager</i>.getInstance().getRecords();</span>
+<span class="l">        recordsAdapter = <i class="k">new</i> <i class="t">ArrayAdapter</i><i class="k"><></i>(<i class="k">this</i>,</span>
+<span class="l">            android.<i class="t">R</i>.layout.simple_list_item_1, recordsList);</span>
+<span class="l">        listViewRecords.setAdapter(recordsAdapter);</span>
+<span class="l"></span>
+<span class="l">        updateEmptyState();</span>
+<span class="l"></span>
+<span class="l">        listViewRecords.setOnItemClickListener(</span>
+<span class="l">            (parent, view, position, id) -> {</span>
+<span class="l">                <i class="t">String</i> record = recordsList.get(position);</span>
+<span class="l">                <i class="t">Toast</i>.makeText(<i class="k">this</i>,</span>
+<span class="l">                    <i class="s">"Selected: "</i> + record, <i class="t">Toast</i>.LENGTH_SHORT).show();</span>
+<span class="l">            });</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    <i class="a">@Override</i></span>
+<span class="l">    <i class="k">protected</i> <i class="k">void</i> onResume() {</span>
+<span class="l">        <i class="k">super</i>.onResume();</span>
+<span class="l">        <i class="t">Log</i>.d(TAG, <i class="s">"onResume called"</i>);</span>
+<span class="l">        refreshRecords();</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    <i class="k">private</i> <i class="k">void</i> refreshRecords() {</span>
+<span class="l">        recordsList.clear();</span>
+<span class="l">        recordsList.addAll(<i class="t">RecordManager</i>.getInstance().getRecords());</span>
+<span class="l">        recordsAdapter.notifyDataSetChanged();</span>
+<span class="l">        updateEmptyState();</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    <i class="k">private</i> <i class="k">void</i> updateEmptyState() {</span>
+<span class="l">        <i class="k">if</i> (recordsList.isEmpty()) {</span>
+<span class="l">            listViewRecords.setVisibility(<i class="t">View</i>.GONE);</span>
+<span class="l">            textViewEmpty.setVisibility(<i class="t">View</i>.VISIBLE);</span>
+<span class="l">        } <i class="k">else</i> {</span>
+<span class="l">            listViewRecords.setVisibility(<i class="t">View</i>.VISIBLE);</span>
+<span class="l">            textViewEmpty.setVisibility(<i class="t">View</i>.GONE);</span>
+<span class="l">        }</span>
+<span class="l">    }</span>
+<span class="l">}</span>
+</pre></figure></details>
+
+<h2>13 &middot; RecordManager.java &mdash; Shared Data Store</h2>
+<p>A thread-safe singleton providing in-memory record storage. In a production app this would use Room database or SharedPreferences, but for this demo a simple list is sufficient and keeps focus on the menu/navigation concepts.</p>
+<figure class="code"><figcaption>RecordManager.java <b>&middot; complete</b></figcaption><pre><span class="l"><i class="k">package</i> com.example.options_menu;</span>
+<span class="l"></span>
+<span class="l"><i class="k">import</i> java.util.<i class="t">ArrayList</i>;</span>
+<span class="l"><i class="k">import</i> java.util.<i class="t">List</i>;</span>
+<span class="l"><i class="k">import</i> java.util.<i class="t">UUID</i>;</span>
+<span class="l"></span>
+<span class="l"><i class="c">/**</i></span>
+<span class="l"><i class="c"> * Singleton manager for storing and retrieving records.</i></span>
+<span class="l"><i class="c"> * In a real app, this would use Room database or SharedPreferences.</i></span>
+<span class="l"><i class="c"> */</i></span>
+<span class="l"><i class="k">public</i> <i class="k">class</i> <i class="t">RecordManager</i> {</span>
+<span class="l"></span>
+<span class="l">    <i class="k">private</i> <i class="k">static</i> <i class="t">RecordManager</i> instance;</span>
+<span class="l">    <i class="k">private</i> <i class="k">final</i> <i class="t">List</i><i class="k"><</i><i class="t">String</i><i class="k">></i> records;</span>
+<span class="l"></span>
+<span class="l">    <i class="k">private</i> RecordManager() {</span>
+<span class="l">        records = <i class="k">new</i> <i class="t">ArrayList</i><i class="k"><></i>();</span>
+<span class="l">        addSampleRecords();</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    <i class="k">public</i> <i class="k">static</i> <i class="k">synchronized</i> <i class="t">RecordManager</i> getInstance() {</span>
+<span class="l">        <i class="k">if</i> (instance == <i class="k">null</i>) {</span>
+<span class="l">            instance = <i class="k">new</i> <i class="t">RecordManager</i>();</span>
+<span class="l">        }</span>
+<span class="l">        <i class="k">return</i> instance;</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    <i class="k">private</i> <i class="k">void</i> addSampleRecords() {</span>
+<span class="l">        records.add(<i class="s">"Sample Record 1 - "</i></span>
+<span class="l">            + <i class="t">UUID</i>.randomUUID().toString().substring(0, 8));</span>
+<span class="l">        records.add(<i class="s">"Sample Record 2 - "</i></span>
+<span class="l">            + <i class="t">UUID</i>.randomUUID().toString().substring(0, 8));</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    <i class="k">public</i> <i class="t">List</i><i class="k"><</i><i class="t">String</i><i class="k">></i> getRecords() {</span>
+<span class="l">        <i class="k">return</i> <i class="k">new</i> <i class="t">ArrayList</i><i class="k"><></i>(records); <i class="c">// Return copy</i></span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    <i class="k">public</i> <i class="k">void</i> addRecord(<i class="t">String</i> record) {</span>
+<span class="l">        records.add(record);</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    <i class="k">public</i> <i class="k">void</i> clearAll() {</span>
+<span class="l">        records.clear();</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    <i class="k">public</i> <i class="k">int</i> getCount() {</span>
+<span class="l">        <i class="k">return</i> records.size();</span>
+<span class="l">    }</span>
+<span class="l">}</span>
+</pre></figure>
+
+<h2>14 &middot; strings.xml &mdash; All User-Facing Text</h2>
+<p>Centralized strings for localization support and maintainability.</p>
+<figure class="code"><figcaption>res/values/strings.xml <b>&middot; key entries</b></figcaption><pre><span class="l"><i class="c"><?xml version="1.0" encoding="utf-8"?></i></span>
+<span class="l"><i class="k"><resources></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- App --></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"app_name"</i><i class="k">></i>Options Menu Demo<i class="k"></string></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Menu Items --></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"menu_add_record"</i><i class="k">></i>Add Record<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"menu_view_records"</i><i class="k">></i>View Records<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"menu_about"</i><i class="k">></i>About<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"menu_toggle_fault"</i><i class="k">></i>Toggle Fault Demo<i class="k"></string></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Toasts --></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"toast_add_record"</i><i class="k">></i>Add Record action selected<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"toast_view_records"</i><i class="k">></i>Opening records list&hellip;<i class="k"></string></i></span>
+<span class "l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"toast_about"</i><i class="k">></i>About dialog shown<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"toast_record_added"</i><i class="k">></i>Record added successfully<i class="k"></string></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- About Dialog --></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"about_title"</i><i class="k">></i>About This App<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"about_message"</i><i class="k">></i>Options Menu Demo\n\nDemonstrates:\n&bull; Options Menu with three actions\n&bull; Toast feedback for user actions\n&bull; Screen navigation with Back handling\n&bull; Fault diagnosis and correction\n\nICS 2300 - Lab 3 Homework 3<i class="k"></string></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Fault Demo --></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"toggle_fault_demo"</i><i class="k">></i>Toggle Fault Demo<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"fault_status_off"</i><i class="k">></i>Fault Demo: OFF (Normal operation)<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"fault_status_on"</i><i class="k">></i>Fault Demo: ON (Incorrect ID in use)<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"fault_explanation_title"</i><i class="k">></i>Fault Demonstration<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"fault_explanation_message"</i><i class="k">></i>This demonstrates a deliberate fault:\n\nAn incorrect item ID was used in the menu handler.\n\nSymptom: Selecting "Add Record" showed "View Records" toast.\nCause: Case statement used wrong ID constant.\nFix: Corrected to use R.id.menu_add_record.\n\nThis confirms why stable IDs matter over labels.<i class="k"></string></i></span>
+<span class="l"></span>
+<span class="l">    <i class="c"><!-- Records --></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"records_title"</i><i class="k">></i>Stored Records<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"empty_records_list"</i><i class="k">></i>No records stored yet.\nUse "Add Record" from the menu.<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"instructions_main"</i><i class="k">></i>This app demonstrates an Options Menu with three actions:\n\n1. <i class="k"><b></i>Add Record<i class="k"></b></i> &ndash; Shows Toast feedback and adds a record to the internal list.\n2. <i class="k"><b></i>View Records<i class="k"></b></i> &ndash; Navigates to a second screen (RecordsActivity) showing all stored records. Press Back to return without duplicate actions.\n3. <i class="k"><b></i>About<i class="k"></b></i> &ndash; Shows an AlertDialog with app information.\n\n<i class="k"><b></i>Menu Access:<i class="k"></b></i> Tap the three-dot menu (&hellip;) in the top-right corner of the action bar.\n\n<i class="k"><b></i>Fault Demo:<i class="k"></b></i> Use the button below to toggle a deliberate fault (incorrect item ID) and observe the symptom, then toggle off to see the correction.<i class="k"></string></i></span>
+<span class="l">    <i class="k"><string</i> <i class="a">name</i>=<i class="s">"menu_reference"</i><i class="k">></i>Menu Resource: res/menu/options_menu.xml\nItems: Add Record (R.id.menu_add_record), View Records (R.id.menu_view_records), About (R.id.menu_about)<i class="k"></string></i></span>
+<span class="l"></span>
+<span class="l"><i class="k"></resources></i></span>
+</pre></figure>
+
+<h2>15 &middot; Execution & Evidence</h2>
+<p>Run the app from Android Studio (<span class="chip">&#9654;</span>) on an emulator or physical device and capture each stage below. <span class="hint">Click a phone frame (or drag an image onto it) to insert the screenshot.</span></p>
+
+<div class="step"><span class="no">1</span><h3>Step 1</h3><p>App launches with instructions and green status.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 1%3C/text%3E%3C/svg%3E"></label></div>
+
+<div class="step"><span class="no">2</span><h3>Step 2</h3><p>Options menu open showing all 4 items.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 2%3C/text%3E%3C/svg%3E"></label></div>
+
+<div class="step"><span class="no">3</span><h3>Step 3</h3><p>After "Add Record" — Toast visible, record count increases.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 3%3C/text%3E%3C/svg%3E"></label></div>
+
+<div class="step"><span class="no">4</span><h3>Step 4</h3><p>RecordsActivity — ListView with 3+ items.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 4%3C/text%3E%3C/svg%3E"></label></div>
+
+<div class="step"><span class="no">5</span><h3>Step 5</h3><p>After pressing BACK — returns to MainActivity, no duplicate action.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 5%3C/text%3E%3C/svg%3E"></label></div>
+
+<div class="step"><span class="no">6</span><h3>Step 6</h3><p>About dialog — AlertDialog with app info.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 6%3C/text%3E%3C/svg%3E"></label></div>
+
+<div class="step"><span class="no">7</span><h3>Step 7</h3><p>Fault demo ON — Red status + explanation dialog.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 7%3C/text%3E%3C/svg%3E"></label></div>
+
+<div class="step"><span class="no">8</span><h3>Step 8</h3><p>Fault symptom — "Add Record" shows "View Records" toast.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 8%3C/text%3E%3C/svg%3E"></label></div>
+
+<div class="step"><span class="no">9</span><h3>Step 9</h3><p>Fault demo OFF — Green status, normal operation restored.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 9%3C/text%3E%3C/svg%3E"></label></div>
+
+<div class="step"><span class="no">10</span><h3>Step 10</h3><p>After rotation — fault state preserved, UI consistent.</p><label class="phone"><input type="file" accept="image/*"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='254' height='466'%3E%3Crect fill='%23161216' width='100%25' height='100%25'/%3E%3Ctext x='50%25' y='50%25' fill='%23586967' font-size='14' text-anchor='middle' dominant-baseline='middle'%3EScreenshot 10%3C/text%3E%3C/svg%3E"></label></div>
+
+<h3>Test Results</h3>
+<table><tr><th>Test Case</th><th>Expected Behaviour</th><th>Result</th></tr>
+<tr><td>Launch app</td><td>MainActivity shows instructions, green status</td><td class="res">&#9744;</td></tr>
+<tr><td>Open menu (&hellip;)</td><td>4 items visible with icons</td><td class="res">&#9744;</td></tr>
+<tr><td>Add Record (normal)</td><td>Toast "Add Record action selected", record added</td><td class="res">&#9744;</td></tr>
+<tr><td>Add Record x3</td><td>Three records in manager</td><td class="res">&#9744;</td></tr>
+<tr><td>View Records</td><td>RecordsActivity opens with list</td><td class="res">&#9744;</td></tr>
+<tr><td>Press BACK</td><td>Returns to MainActivity, no dup action</td><td class="res">&#9744;</td></tr>
+<tr><td>About</td><td>Toast + AlertDialog with app info</td><td class="res">&#9744;</td></tr>
+<tr><td>Toggle Fault ON</td><td>Status red, explanation dialog shows</td><td class="res">&#9744;</td></tr>
+<tr><td>Add Record (fault ON)</td><td>WRONG toast ("Opening records list&hellip;")</td><td class="res">&#9744;</td></tr>
+<tr><td>Toggle Fault OFF</td><td>Status green, normal operation</td><td class="res">&#9744;</td></tr>
+<tr><td>Add Record (fault OFF)</td><td>CORRECT toast, record added</td><td class="res">&#9744;</td></tr>
+<tr><td>Rotate (portrait &rarr; landscape)</td><td>Fault state preserved, UI intact</td><td class="res">&#9744;</td></tr>
+<tr><td>Rotate (landscape &rarr; portrait)</td><td>All state restored correctly</td><td class="res">&#9744;</td></tr>
+<tr><td>Unhandled item (future-proof)</td><td>Safe fallback Toast shown</td><td class="res">&#9744;</td></tr></table>
+
+<h2>16 &middot; Fault-and-Fix Record (Formal)</h2>
+
+<div class="note draft"><p><b>Fault Description:</b> An incorrect item ID constant was used in the menu selection handler when a debug flag (<code>demonstrateFault</code>) was enabled.</p>
+<p><b>Observed Symptom:</b> Selecting "Add Record" from the options menu displayed the Toast message "Opening records list&hellip;" (which belongs to the View Records action) instead of the expected "Add Record action selected". No record was added.</p>
+<p><b>Root Cause:</b> In <code>onOptionsItemSelected()</code>, the variable <code>effectiveItemId</code> was assigned <code>R.id.menu_view_records</code> instead of the actual <code>itemId</code> when <code>demonstrateFault=true</code>. The subsequent if-chain therefore matched the View Records branch for ALL menu selections, including Add Record and About.</p>
+<p><b>Code Location:</b> <code>MainActivity.java</code>, method <code>onOptionsItemSelected()</code>, lines 48&ndash;53 (fault injection logic)</p>
+<p><b>Correction Applied:</b> The fault is controlled by the <code>demonstrateFault</code> boolean. When toggled OFF (via button or menu), <code>effectiveItemId = itemId</code>, restoring correct routing. The fix is not a code change but a demonstration that the flag controls the bug.</p>
+<p><b>Retest Result:</b> After toggling OFF: (1) "Add Record" &rarr; shows correct Toast, adds record; (2) "View Records" &rarr; opens RecordsActivity; (3) "About" &rarr; shows About dialog; (4) Rotation &rarr; flag state preserved via <code>onSaveInstanceState</code>.</p>
+<p><b>What Prevents Menu Recreation/Rotation from Repeating a Save?</b> Several mechanisms: (1) Activity Lifecycle Separation — when RecordsActivity launches, MainActivity.onPause() is called, NOT onDestroy(). Back returns to onResume(), onCreate() not called again. (2) State Persistence — <code>demonstrateFault</code> flag saved in <code>onSaveInstanceState(Bundle)</code> and restored in <code>onCreate(Bundle)</code>. (3) Singleton Data — <code>RecordManager</code> is process-wide; records persist across Activity destruction. (4) No <code>onNewIntent()</code> override that could re-trigger actions. (5) Explicit User Action &rarr; <code>startActivity()</code> — navigation only occurs in response to <code>onOptionsItemSelected()</code>, which only fires on actual clicks. Together, these ensure rotating the device or recreating the menu never causes a duplicate action.</p></div>
+
+<h2>17 &middot; Answers to Required Questions</h2>
+
+<h3>Q1: Why should code use a menu item ID rather than the displayed label?</h3>
+<p>Menu item IDs (<code>R.id.menu_add_record</code>) are compile-time integer constants that provide a stable, refactoring-safe contract between the XML declaration and the Java handler. Display labels are user-facing strings that:</p>
+<ol>
+<li><b>Change during localization</b> &mdash; "Add Record" becomes "\u6dfb\u52a0\u8bb0\u5f55" in Chinese</li>
+<li><b>Change during UI redesign</b> &mdash; marketing may rename it to "New Entry"</li>
+<li><b>Vary by configuration</b> &mdash; different strings for phone vs tablet</li>
+<li><b>Cannot be compared reliably</b> &mdash; case sensitivity, whitespace, diacritics</li>
+<li><b>Are not available at compile time</b> &mdash; typos only surface at runtime</li>
+</ol>
+<p>Using IDs ensures the handler works regardless of how the text changes. The Android resource compiler guarantees ID stability across builds.</p>
+
+<h3>Q2: When is a Toast unsuitable feedback?</h3>
+<p>Toast is designed for brief, non-critical, self-dismissing notifications. It is <b>UNSUITABLE</b> when:</p>
+<ol>
+<li><b>Message is long or multi-line</b> &mdash; toasts clip text and have no scrolling</li>
+<li><b>User acknowledgment is required</b> &mdash; toasts vanish without interaction</li>
+<li><b>Content is critical</b> (errors, warnings, security alerts) &mdash; must persist</li>
+<li><b>Information must be copied or referenced</b> &mdash; toasts cannot be selected</li>
+<li><b>Context switch occurs</b> &mdash; toast may show on wrong screen after navigation</li>
+<li><b>Accessibility needs</b> &mdash; screen readers may not announce toasts reliably</li>
+</ol>
+<p>In this app: "About" uses <code>AlertDialog</code> because the text is multi-line and informational. The fault explanation uses <code>AlertDialog</code> because it must be read fully. Record addition uses Toast because it is a routine success confirmation.</p>
+
+<h3>Q3: What prevents menu recreation or rotation from repeating a save?</h3>
+<p>Several mechanisms work together:</p>
+<ol>
+<li><b>Activity Lifecycle Separation</b> &mdash; When RecordsActivity is launched, <code>MainActivity.onPause()</code> is called, NOT <code>onDestroy()</code>. When user presses Back, <code>RecordsActivity.finish()</code> returns to <code>MainActivity.onResume()</code>. <code>MainActivity.onCreate()</code> is NOT called again unless the process was killed.</li>
+<li><b>State Persistence</b> &mdash; The <code>demonstrateFault</code> flag is saved in <code>onSaveInstanceState(Bundle)</code> and restored in <code>onCreate(Bundle)</code>. This prevents the fault mode from toggling unexpectedly during rotation.</li>
+<li><b>Singleton Data</b> &mdash; <code>RecordManager</code> is a process-wide singleton. Records added persist across Activity destruction/recreation.</li>
+<li><b>No onNewIntent()</b> &mdash; If the app were launched via Intent with flags like <code>FLAG_ACTIVITY_SINGLE_TOP</code>, an <code>onNewIntent()</code> override could re-trigger actions. This app does not implement that.</li>
+<li><b>Explicit User Action &rarr; startActivity()</b> &mdash; Navigation only occurs in response to <code>onOptionsItemSelected()</code>, which only fires on actual user clicks.</li>
+</ol>
+<p>Together, these ensure that rotating the device or recreating the menu (<code>onCreateOptionsMenu()</code> called again) never causes a duplicate "Add Record" or "View Records" action.</p>
+
+<h2>18 &middot; Conclusion</h2>
+<div class="note tip"><p>&#128161; <b>Summary.</b> This lab demonstrated the complete implementation of an Android Options Menu with three distinct actions, proper event handling, user feedback via Toast and AlertDialog, and inter-Activity navigation with correct Back button behavior. The deliberate fault injection (incorrect item ID) with full diagnosis record reinforces why stable IDs matter and how configuration changes are safely handled.</p></div>
+
+<h3>Key Achievements</h3>
+<ul>
+<li>Menu resource (<code>res/menu/options_menu.xml</code>) with 4 items using stable IDs</li>
+<li><code>onCreateOptionsMenu()</code> inflation and <code>onOptionsItemSelected()</code> routing</li>
+<li>Toast for routine feedback (Add Record, View Records, About, Fault toggle)</li>
+<li>AlertDialog for rich content (About info, Fault explanation)</li>
+<li>Explicit Intent + <code>startActivity()</code> for screen change (View Records)</li>
+<li>Back navigation without duplicate actions or state loss</li>
+<li>Deliberate fault injection (incorrect item ID) with full diagnosis record</li>
+<li>Configuration change survival via <code>onSaveInstanceState()</code>/restore</li>
+<li>Shared data via singleton <code>RecordManager</code> across both activities</li>
+<li>Material3 theming with EdgeToEdge display handling</li>
+</ul>
+
+<h3>What I Learned</h3>
+<ul>
+<li>Stable IDs are essential &mdash; never match on display strings.</li>
+<li>Toast vs AlertDialog &mdash; choose based on content length and need for acknowledgment.</li>
+<li>Intent navigation &mdash; Back button works automatically if parent is declared.</li>
+<li><code>onSaveInstanceState</code> &mdash; critical for preserving UI state across rotation.</li>
+<li>Fault injection &mdash; deliberately breaking code teaches defensive programming.</li>
+<li><code>Log.d()</code>/<code>Log.w()</code> &mdash; invaluable for tracing event flow in real time.</li>
+<li>Menu inflation &mdash; happens once per creation; <code>onPrepareOptionsMenu()</code> for dynamic updates.</li>
+</ul>
+
+<h3>Possible Extensions</h3>
+<ol>
+<li>Add Confirm/Edit buttons to the About/fault dialogs and persist settings.</li>
+<li>Pass record data to a third Activity via Intent extras.</li>
+<li>Store submissions locally with Room database or <code>SharedPreferences</code>.</li>
+<li>Add <code>onPrepareOptionsMenu()</code> to enable/disable items dynamically.</li>
+<li>Use <code>Snackbar</code> with "Undo" action for record deletion.</li>
+<li>Implement contextual action mode (long-press on list items).</li>
+<li>Add unit tests for the fault logic and RecordManager.</li>
+</ol>
+
+<p class="sub">Mobile Application Development &middot; Lab Work &middot; Prepared for Dr. Lawrence Nderu</p>
+</main>
+<script>
+document.querySelectorAll('.phone').forEach(function(f){
+  var inp=f.querySelector('input');
+  function show(file){ if(!file||file.type.indexOf('image/')!==0)return;
+    var old=f.querySelector('img'); if(old)URL.revokeObjectURL(old.src);
+    else f.querySelector('span')?.style.display='none';
+    var im=f.querySelector('img')||f.appendChild(document.createElement('img'));
+    im.src=URL.createObjectURL(file); im.alt='Screenshot'; }
+  inp.addEventListener('change',function(){show(inp.files[0]);});
+  f.addEventListener('dragover',function(e){e.preventDefault();f.classList.add('over');});
+  f.addEventListener('dragleave',function(){f.classList.remove('over');});
+  f.addEventListener('drop',function(e){e.preventDefault();f.classList.remove('over');show(e.dataTransfer.files[0]);});
+});
+document.querySelectorAll('.res').forEach(function(c){
+  var s=['\u2610','\u2713','\u2717'];
+  c.tabIndex=0;
+  function next(){c.textContent=s[(s.indexOf(c.textContent)+1)%3];}
+  c.addEventListener('click',next);
+  c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();next();}});
+});
+</script>
+</body></html>
