@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">Class Records</string>
+    <string name="lab_subtitle">Lab 03: Options Menu, Navigation &amp; Toast Feedback</string>
+
+    <!-- Menu items -->
+    <string name="action_add_record">Add Record</string>
+    <string name="action_view_records">View Records</string>
+    <string name="action_about">About</string>
+
+    <!-- Toast messages -->
+    <string name="toast_add_record">Record added</string>
+    <string name="toast_view_records">Opening records</string>
+    <string name="toast_about">About this app</string>
+
+    <!-- Input fields -->
+    <string name="hint_student_name">Student Name</string>
+    <string name="hint_reg_no">Registration Number</string>
+
+    <!-- Validation errors -->
+    <string name="error_name_required">Student name is required</string>
+    <string name="error_reg_no_required">Registration number is required</string>
+
+    <!-- Status texts -->
+    <string name="draft_status_unsaved">Draft: Unsaved changes</string>
+    <string name="draft_status_clean">Draft: No pending changes</string>
+    <string name="records_saved_count">Records saved: %d</string>
+
+    <!-- Buttons -->
+    <string name="fault_demo_button">Show Fault Diagnosis Demo</string>
+
+    <!-- About dialog -->
+    <string name="about_title">About Class Records</string>
+    <string name="about_message">This app demonstrates Options Menu, Navigation, and Toast feedback.
+
+Lab 03 - ICS 2300
+JKUAT Mobile Application Development
+
+Features:
+- Options Menu with 3 actions
+- Toast feedback for each action
+- Persistent validation errors
+- Navigation with unsaved changes warning
+- State preservation across rotation
+- Fault diagnosis example</string>
+
+    <!-- View Records screen -->
+    <string name="view_records_title">View Records</string>
+    <string name="view_records_empty">No records saved yet.
+
+Use "Add Record" from the menu to add student records.</string>
+    <string name="view_records_no_data">No record data received.</string>
+
+    <!-- Unsaved changes dialog -->
+    <string name="unsaved_title">Unsaved Changes</string>
+    <string name="unsaved_message">You have unsaved input. Discard changes and view records?</string>
+    <string name="discard_view">Discard &amp; View</string>
+    <string name="stay_edit">Stay &amp; Edit</string>
+
+    <!-- Fault demo -->
+    <string name="fault_demo_title">Fault Diagnosis</string>
+    <string name="fault_demo_message">Deliberate fault demonstration:
+
+<b>Fault:</b> Mismatched menu item ID in onOptionsItemSelected()
+<b>Symptom:</b> Menu selection does nothing (no Toast, no navigation)
+<b>Cause:</b> Code checks for R.id.action_view_record (singular) but menu defines @+id/action_view_records (plural)
+<b>Correction:</b> Use exact ID from menu resource: R.id.action_view_records
+<b>Retest:</b> After fix, selection works correctly
+
+Check Logcat (tag: MainActivity) for trace.</string>
+</resources>
