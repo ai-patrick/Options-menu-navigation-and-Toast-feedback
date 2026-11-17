@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Options Menu Demo</string>
+
+    <!-- Options Menu Items -->
+    <string name="menu_add_record">Add Record</string>
+    <string name="menu_view_records">View Records</string>
+    <string name="menu_about">About</string>
+    <string name="menu_toggle_fault">Toggle Fault Demo</string>
+
+    <!-- Toasts and Messages -->
+    <string name="toast_add_record">Add Record action selected</string>
+    <string name="toast_view_records">Opening records list…</string>
+    <string name="toast_about">About dialog shown</string>
+    <string name="toast_record_added">Record added successfully</string>
+    <string name="toast_no_records">No records to display</string>
+    <string name="toast_fault_demo">Fault demonstrated: incorrect item ID</string>
+
+    <!-- About Dialog -->
+    <string name="about_title">About This App</string>
+    <string name="about_message">Options Menu Demo\n\nDemonstrates:\n• Options Menu with three actions\n• Toast feedback for user actions\n• Screen navigation with Back handling\n• Fault diagnosis and correction\n\nICS 2300 - Lab 3 Homework 3</string>
+    <string name="about_ok">OK</string>
+
+    <!-- Records Activity -->
+    <string name="records_title">Stored Records</string>
+    <string name="empty_records_list">No records stored yet.\nUse "Add Record" from the menu.</string>
+    <string name="record_item_prefix">Record #</string>
+
+    <!-- Fault Demo -->
+    <string name="fault_explanation_title">Fault Demonstration</string>
+    <string name="fault_explanation_message">This demonstrates a deliberate fault:\n\nAn incorrect item ID was used in the menu handler.\n\nSymptom: Selecting "Add Record" showed "View Records" toast.\nCause: Case statement used wrong ID constant.\nFix: Corrected to use R.id.menu_add_record.\n\nThis confirms why stable IDs matter over labels.</string>
+
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="back">Back</string>
+
+    <!-- Main Activity UI -->
+    <string name="instructions_main">This app demonstrates an Options Menu with three actions:\n\n1. <b>Add Record</b> – Shows Toast feedback and adds a record to the internal list.\n2. <b>View Records</b> – Navigates to a second screen (RecordsActivity) showing all stored records. Press Back to return without duplicate actions.\n3. <b>About</b> – Shows an AlertDialog with app information.\n\n<b>Menu Access:</b> Tap the three-dot menu (⋮) in the top-right corner of the action bar.\n\n<b>Fault Demo:</b> Use the button below to toggle a deliberate fault (incorrect item ID) and observe the symptom, then toggle off to see the correction.</string>
+    <string name="toggle_fault_demo">Toggle Fault Demo</string>
+    <string name="fault_status_off">Fault Demo: OFF (Normal operation)</string>
+    <string name="fault_status_on">Fault Demo: ON (Incorrect ID in use)</string>
+    <string name="menu_reference">Menu Resource: res/menu/options_menu.xml\nItems: Add Record (R.id.menu_add_record), View Records (R.id.menu_view_records), About (R.id.menu_about)</string>
+</resources>
