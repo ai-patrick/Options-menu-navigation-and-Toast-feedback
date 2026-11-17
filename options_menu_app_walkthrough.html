@@ -3,34 +3,34 @@
 <title>Options Menu App — Lab 03 Walkthrough</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f5f8f7;--card:#fff;--ink:#1c2b29;--mute:#586967;--line:#cddad8;--acc:#0f766e;--accbg:#e3f2ef;--warn:#fff4dc;--warnl:#e0b252;--tip:#e8f1fb;--tipl:#7aa7d9;--code:#142120}
+:root{--bg:#f5f8f7;--card:#fff;--ink:#000;--mute:#333;--line:#cddad8;--acc:#0f766e;--accbg:#e3f2ef;--warn:#fff4dc;--warnl:#e0b252;--tip:#e8f1fb;--tipl:#7aa7d9;--code:#142120}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 main{max-width:860px;margin:0 auto;padding:40px 20px 80px}
-h1{font-size:2rem;line-height:1.2;margin:.2em 0 .1em}
-h2{font-size:1.5rem;margin:2.4em 0 .6em;padding-bottom:.35em;border-bottom:2px solid var(--line)}
-h3{font-size:1.1rem;margin:1.8em 0 .4em}
-p{margin:.6em 0;max-width:72ch}
-.kicker{color:var(--acc);font-weight:600;font-size:.9rem}
-.meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin:16px 0 0;color:var(--mute);font-size:.92rem}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0 .1em;color:var(--ink)}
+h2{font-size:1.5rem;margin:2.4em 0 .6em;padding-bottom:.35em;border-bottom:2px solid var(--line);color:var(--ink)}
+h3{font-size:1.1rem;margin:1.8em 0 .4em;color:var(--ink)}
+p{margin:.6em 0;max-width:72ch;color:var(--ink)}
+.kicker{color:var(--ink);font-weight:600;font-size:.9rem}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin:16px 0 0;color:var(--ink);font-size:.92rem}
 .meta b{color:var(--ink);font-weight:600}
 .fill{border-bottom:1.5px dashed var(--acc);padding:0 4px;min-width:5em;display:inline-block;color:var(--acc)}
 .fill:focus{outline:2px solid var(--acc);outline-offset:2px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:16px 0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.card b{display:block;margin-bottom:2px}.card span{color:var(--mute);font-size:.92rem}
+.card b{display:block;margin-bottom:2px;color:var(--ink)}.card span{color:var(--ink);font-size:.92rem}
 table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.92rem;margin:14px 0}
-th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:var(--accbg);font-weight:600}tr:last-child td{border-bottom:0}
-td code,p code,li code{background:var(--accbg);padding:1px 5px;border-radius:5px;font-size:.88em}
-.res{cursor:pointer;text-align:center;width:64px;font-size:1.1rem;user-select:none}
-.ed{min-width:9em;color:var(--acc)}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink)}
+th{background:var(--accbg);font-weight:600;color:var(--ink)}tr:last-child td{border-bottom:0}
+td code,p code,li code{background:var(--accbg);padding:1px 5px;border-radius:5px;font-size:.88em;color:var(--ink)}
+.res{cursor:pointer;text-align:center;width:64px;font-size:1.1rem;user-select:none;color:var(--ink)}
+.ed{min-width:9em;color:var(--ink)}
 .note{border-left:4px solid;border-radius:8px;padding:10px 14px;margin:16px 0}
 .note.warn{background:var(--warn);border-color:var(--warnl)}.note.tip{background:var(--tip);border-color:var(--tipl)}
 .note.draft{background:var(--card);border:1px dashed var(--warnl);border-left:4px solid var(--warnl)}
-.note p{margin:.3em 0}
+.note p{margin:.3em 0;color:var(--ink)}
 .flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0}
-.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.9rem}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.9rem;color:var(--ink)}
 .chip.ok{background:var(--accbg);border-color:var(--acc)}.chip.bad{background:var(--warn);border-color:var(--warnl)}
 .arr{color:var(--mute)}
 .code{margin:14px 0;border-radius:12px;overflow:hidden;background:var(--code);color:#dbe8e6}
@@ -40,20 +40,20 @@ td code,p code,li code{background:var(--accbg);padding:1px 5px;border-radius:5px
 .l::before{counter-increment:n;content:counter(n);display:inline-block;width:2.4em;margin-right:1.1em;text-align:right;color:#5f7a77;user-select:none}
 .code i{font-style:normal}.c{color:#7f9a97;font-style:italic!important}.s{color:#e6c07b}.k{color:#7fd1c3}.a{color:#e5a3c5}.t{color:#8ab4f8}.n{color:#f0a77a}
 details{margin:14px 0;border:1px solid var(--line);border-radius:12px;background:var(--card)}
-summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--acc)}details .code{margin:0;border-radius:0 0 12px 12px}
-.tree{font:.85rem/1.6 ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;white-space:pre;overflow-x:auto}
+summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--ink)}details .code{margin:0;border-radius:0 0 12px 12px}
+.tree{font:.85rem/1.6 ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;white-space:pre;overflow-x:auto;color:var(--ink)}
 .step{display:grid;grid-template-columns:44px 1fr;gap:4px 14px;margin:26px 0}
 .step .no{width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font-weight:700;color:var(--mute)}
-.step h3{margin:6px 0 0}.step p,.step .phone{grid-column:2}
+.step h3{margin:6px 0 0;color:var(--ink)}.step p,.step .phone{grid-column:2}
 .phone{display:grid;place-items:center;width:210px;height:420px;border:8px solid #2a2f33;border-radius:28px;background:var(--card);color:var(--mute);font-size:.85rem;text-align:center;padding:12px;cursor:pointer;overflow:hidden}
 .phone.over{outline:3px dashed var(--acc)}.phone input{display:none}.phone img{width:100%;height:100%;object-fit:contain}
-ul,ol{max-width:72ch}li{margin:.25em 0}
+ul,ol{max-width:72ch}li{margin:.25em 0;color:var(--ink)}
 @media print{@page{size:A4;margin:14mm}body{background:#fff;color:#000;font-size:11pt}main{padding:0;max-width:none}
 .hint{display:none}.code pre{white-space:pre-wrap;overflow:visible}.code,.card,.note,table,.step{break-inside:avoid}h2{break-after:avoid}}
 .phone{width:254px;height:466px;border:2px solid var(--line);border-radius:28px;padding:0;background:#161216}
 .phone img{object-fit:cover}.card .ic{font-size:1.4rem;display:block}
-.who{display:flex;flex-wrap:wrap;gap:8px 20px;color:var(--mute);margin:14px 0 0;font-size:.95rem}
-.sub{color:var(--mute);margin:.2em 0 0}
+.who{display:flex;flex-wrap:wrap;gap:8px 20px;color:var(--ink);margin:14px 0 0;font-size:.95rem}
+.sub{color:var(--ink);margin:.2em 0 0}
 @media print{.step{break-inside:avoid}.phone{border-color:#999}}
 </style></head><body><main>
 <p class="kicker">MOBILE APPLICATION DEVELOPMENT &bull; LAB WORK</p>
