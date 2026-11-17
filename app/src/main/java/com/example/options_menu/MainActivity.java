@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -73,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
      * Handle menu item selections.
      * Uses stable item IDs (not labels) for reliable matching.
      * Demonstrates deliberate fault when demonstrateFault flag is true.
+     * The fault ONLY affects the three assessed actions (Add Record, View Records, About).
+     * The Toggle Fault control (menu_toggle_fault) always uses the REAL itemId
+     * so the user can always turn the fault off.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
         // DEMONSTRATE FAULT: Use incorrect ID when flag is set
         // This simulates a common bug where developer uses wrong constant
+        // ONLY for the three assessed actions; menu_toggle_fault uses real itemId below
         int effectiveItemId = demonstrateFault ? R.id.menu_view_records : itemId;
 
         if (effectiveItemId != itemId) {
@@ -97,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
             handleAbout();
             return true;
         } else if (itemId == R.id.menu_toggle_fault) {
-            // This item should NOT use the fault-affected ID
-            // It's the control to toggle the fault demo itself
-            onToggleFaultClick(null);
+            // This item MUST use the REAL itemId (not effectiveItemId)
+            // so the user can always toggle the fault off
+            toggleFaultDemo();
             return true;
         }
 
@@ -111,20 +113,17 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Handle "Add Record" action.
-     * Shows Toast feedback and adds a record to the manager.
+     * Shows a single confirmation Toast and adds a record to the manager.
      */
     private void handleAddRecord() {
         Log.d(TAG, "handleAddRecord called");
-
-        // Show brief, non-critical feedback via Toast
-        Toast.makeText(this, R.string.toast_add_record, Toast.LENGTH_SHORT).show();
 
         // Add a new record
         String newRecord = "Record #" + (RecordManager.getInstance().getCount() + 1)
                 + " - Added at " + java.time.LocalTime.now().toString().substring(0, 8);
         RecordManager.getInstance().addRecord(newRecord);
 
-        // Follow-up confirmation Toast
+        // Single confirmation Toast (first Toast removed to avoid queueing)
         Toast.makeText(this, R.string.toast_record_added, Toast.LENGTH_SHORT).show();
 
         Log.d(TAG, "Record added: " + newRecord);
@@ -165,23 +164,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Toggle fault demonstration mode.
-     * Called from a long-press or could be a debug option.
-     * This allows the user to see the fault and its correction.
-     */
-    public void toggleFaultDemo(MenuItem item) {
-        demonstrateFault = !demonstrateFault;
-        Log.d(TAG, "Fault demo toggled: " + demonstrateFault);
-
-        String status = demonstrateFault ? "ENABLED (incorrect ID will be used)" : "DISABLED (correct ID used)";
-        Toast.makeText(this, "Fault Demo: " + status, Toast.LENGTH_LONG).show();
-
-        if (demonstrateFault) {
-            showFaultExplanation();
-        }
-    }
-
-    /**
      * Show explanation of the deliberate fault for educational purposes.
      */
     private void showFaultExplanation() {
@@ -193,22 +175,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Click handler for the Toggle Fault Demo button.
-     * Updates the UI to reflect the current fault state.
+     * Toggles the fault demonstration mode.
+     * Called from the menu item (menu_toggle_fault).
      */
-    public void onToggleFaultClick(View view) {
+    private void toggleFaultDemo() {
         demonstrateFault = !demonstrateFault;
-        Log.d(TAG, "Fault demo toggled via button: " + demonstrateFault);
-
-        // Update status text
-        TextView statusText = findViewById(R.id.textViewFaultStatus);
-        if (demonstrateFault) {
-            statusText.setText(R.string.fault_status_on);
-            statusText.setTextColor(getColor(android.R.color.holo_red_dark));
-        } else {
-            statusText.setText(R.string.fault_status_off);
-            statusText.setTextColor(getColor(android.R.color.holo_green_dark));
-        }
+        Log.d(TAG, "Fault demo toggled: " + demonstrateFault);
 
         // Show Toast feedback
         String status = demonstrateFault ? "ENABLED (incorrect ID will be used)" : "DISABLED (correct ID used)";
